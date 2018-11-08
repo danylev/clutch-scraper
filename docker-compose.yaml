@@ -2,17 +2,41 @@ version: "3.5"
 
 volumes:
   clutch_postgres_data: {}
+  metabase_data: {}
 
 services:
   database:
     image: postgres:9.6.3
+    environment:
+      POSTGRES_USER: clutch
+      POSTGRES_PASSWORD: clutchpassword
     ports:
       - "5432:5432"
     volumes:
       - clutch_postgres_data:/var/lib/postgresql/data
+      - ./spiders/scraped/:/var/lib/postgresql/rawdata
   splash:
     image: scrapinghub/splash:latest
     ports:
       - "8050:8050"
+    depends_on:
+      - database
+  metabase:
+    image: metabase/metabase
+    environment:
+      MB_DB_FILE: /metabase-data/metabase.db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - metabase_data:/metabase-data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: adm@adm.com
+      PGADMIN_DEFAULT_PASSWORD: 1qaz2wsx3
+    ports: 
+      - "3001:80"
     depends_on:
       - database

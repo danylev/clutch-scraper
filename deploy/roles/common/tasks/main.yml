@@ -1,0 +1,8 @@
+---
+- include_tasks: create_project_user.yml
+- include_tasks: server.yml
+- include_tasks: git.yml
+- include_tasks: venv.yml
+
+- include_tasks: nginx.yml
+- include_tasks: dockerized.yml

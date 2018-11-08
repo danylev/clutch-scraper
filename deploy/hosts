@@ -1,0 +1,11 @@
+all:
+  hosts:
+    development:
+      ansible_host: 159.69.213.186
+      ansible_port: 22
+      ansible_user: root
+      ansible_python_interpreter: /usr/bin/python3
+      gather_facts: no
+webservers:
+  hosts:
+    development:

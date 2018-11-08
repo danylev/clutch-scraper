@@ -1,0 +1,44 @@
+server {
+    # redirect all 'www' subdomain to domain
+    {% if https %}
+    listen 443 ssl;
+    ssl_certificate {{ ssl_certificate_path }};
+    ssl_certificate_key {{ ssl_certificate_key_path }};
+    {% endif %}
+    # redirect all 'www' subdomain to domain
+    server_name www.{{ domain }};
+    return 301 $scheme://{{ domain }}$request_uri;
+}
+
+{% if https %}
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name _;
+	return 301 https://$host$request_uri;
+	server_tokens off;
+}
+{% endif %}
+
+# General domain case. Hardcode crm web client urls. Other requests will be proxy_passed to php-website.
+server {
+    {% if https %}
+    listen 443 ssl;
+    ssl_certificate {{ ssl_certificate_path }};
+    ssl_certificate_key {{ ssl_certificate_key_path }};
+    {% else %}
+    listen 80;
+    {% endif %}
+
+    server_tokens off;
+    server_name {{ domain }};
+    access_log /var/log/nginx/global-{{ app_name }}-access.log;
+    error_log /var/log/nginx/global-{{ app_name }}-error.log info;
+    client_max_body_size 10M;
+
+    keepalive_timeout 5;
+
+    location / {
+        proxy_pass http://0.0.0.0:{{ metabase_port }};
+    }
+}

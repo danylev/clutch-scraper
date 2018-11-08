@@ -1,0 +1,42 @@
+---
+- name: Create a virtualenv directory
+  file: path={{ venv_dir }} state=directory
+  become: yes
+
+- name: Change virtualenv directory owner
+  command: chown -R {{ linux_user }} {{ venv_dir }}
+  become: yes
+
+- name: Install dependencies
+  pip: 
+    name: docker
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: python3.6
+  become_user: "{{ linux_user }}"
+  become: yes
+
+- name: Install docker-compose
+  pip:    
+    name: docker-compose
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: python3.6
+  become_user: "{{ linux_user }}"
+  become: yes
+
+- name: Create symlink to this python
+  file:
+    src: "{{ venv_dir }}/bin/python"
+    dest: "/usr/bin/python"
+    state: link
+
+- name: Create symlink for docker
+  file:
+    src: "{{ venv_dir }}/bin/docker-compose"
+    dest: "/usr/bin/docker-compose"
+    state: link
+
+- name: Create symlink for pip
+  file:
+    src: "{{ venv_dir }}/bin/pip"
+    dest: "/usr/bin/pip"
+    state: link

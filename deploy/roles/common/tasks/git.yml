@@ -1,0 +1,20 @@
+---
+- name: Set up git configuration
+  apt: name=git state=latest
+  become: yes
+
+- name: Create proj directory
+  file: path={{ app_dir }} state=directory owner={{ linux_user }} group={{ linux_user_group }} mode=0775
+  become: yes
+
+- name: Clone or pull the latest code
+  git: repo={{ git_repo }}
+        dest={{ app_dir }}
+        recursive=yes
+        accept_hostkey=yes
+        version={{ git_branch }}
+        force=yes
+
+- name: Change project dir owner
+  command: chown -R {{ linux_user }} {{ app_dir }}
+  become: yes

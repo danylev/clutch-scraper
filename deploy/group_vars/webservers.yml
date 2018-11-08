@@ -1,0 +1,30 @@
+app_name: clutch
+linux_user: clutch
+linux_user_group: www-data
+
+https: False
+
+# Pathes
+app_dir: "/home/{{ linux_user }}/{{ app_name }}"
+
+# Git configurations
+git_repo: git@github.com:danylev/clutch-scraper.git
+
+# Database configurations
+db_setup: True
+db_name: "{{ app_name }}"
+db_master_user: postgres
+db_master_user_password:
+db_user: clutch
+db_user_password: clutchpassword
+db_host:
+db_port: 5432
+metabase_port: 3000
+database_url: "psql://{{ db_user }}:{{ db_user_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}"
+
+default_superuser_email: admin@admin.adm
+default_superuser_password: 1qaz2wsx3
+
+# Python virtualenv configurations
+venv_dir: '/home/{{ app_name }}/envs/{{ app_name }}'
+venv_python: '{{ venv_dir }}/bin/python2.7'

@@ -1,0 +1,16 @@
+# Git configurations
+git_branch: develop
+
+db_host: '127.0.0.1'
+
+# DNS configurations
+domain: clutch.inprogress.rocks
+
+# Django configurations
+debug_mode: True
+
+secret_key: 7jr*@h=j&wcf7mpv!qiqpo)-ipyef3@hfx3=)om2j6e86k_7)r
+allowed_hosts: .clutch.inprogress.rocks,dev.clutch.inprogress.rocks,clutch.inprogress.rocks,127.0.0.1,159.69.213.186
+
+# Console customization
+console_promt: PS1="\[\033[01;32m\]\u@development \[\033[01;34m\]\t \w \$ \[\033[00m\]"

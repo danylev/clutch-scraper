@@ -1,0 +1,25 @@
+---
+- name: "Launch database container"
+  docker_container:
+    name: database
+    image: postgres:9.6.3
+    env:
+      POSTGRES_USER: "{{ db_user }}"
+      POSTGRES_PASSWORD: "{{ db_user_password }}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - clutch_postgres_data:/var/lib/postgresql/data
+
+- name: "Launch metabase container"
+  docker_container:
+    name: metabase
+    image: metabase/metabase
+    env:
+      MB_DB_FILE: /metabase-data/metabase.db
+    ports:
+      - "3000:3000"
+    links:
+      - database:database
+    volumes:
+      - metabase_data:/metabase-data

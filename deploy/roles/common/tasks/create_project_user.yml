@@ -1,0 +1,36 @@
+---
+- name: Root custom promt on logging
+  become: yes
+  lineinfile:
+    path: ~/.profile
+    line: export {{ console_promt }}
+
+- name: Root bash profile
+  become: yes
+  lineinfile:
+    path: ~/.bashrc
+    line: export {{ console_promt }}
+
+- name: Creating user
+  user: name={{ linux_user }} groups={{ linux_user_group }} append=yes
+  become: yes
+
+- name: User custom promt on logging
+  become: yes
+  lineinfile:
+    path: /home/{{ linux_user }}/.profile
+    line: export {{ console_promt }}
+
+- name: User bash profile
+  become: yes
+  lineinfile:
+    path: /home/{{ linux_user }}/.bashrc
+    line: export {{ console_promt }}
+
+# we use ssh-add to give deploy-user access to the git repo.
+# But he need to be in same group with project-runner user
+# to clone repo into 'linux_user' home directory.
+
+- name: Add deployer user to same group
+  user: name={{ ansible_user_id }} groups={{ linux_user_group }} append=yes
+  become: yes
