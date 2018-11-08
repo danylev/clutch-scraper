@@ -7,7 +7,7 @@ from scrapy_splash import SplashRequest
 
 with open('ladder.json') as fd:
     companies = json.load(fd)
-    companies = companies[:-6965]
+    companies = companies
 
 class ClutchListSpider(scrapy.Spider):
     name = "clutch-profile"
